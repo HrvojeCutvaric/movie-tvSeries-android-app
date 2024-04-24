@@ -1,15 +1,18 @@
 package com.example.movieandroidapp
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import com.example.movieandroidapp.ui.theme.MovieAndroidAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,30 +20,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MovieAndroidAppTheme {
-                // A surface container using the 'background' color from the theme
+                
+                SetBarColor(color = MaterialTheme.colorScheme.inverseOnSurface)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    @Composable
+    private fun SetBarColor(color: Color) {
+        val view = LocalView.current
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MovieAndroidAppTheme {
-        Greeting("Android")
+        if (!view.isInEditMode) {
+            LaunchedEffect(key1 = true) {
+                val window = (view.context as Activity).window
+                window.statusBarColor = color.toArgb()
+            }
+        }
+
     }
 }
+
