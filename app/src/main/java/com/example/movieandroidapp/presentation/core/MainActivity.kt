@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.presentation.core.mainScreen.MainScreen
 import com.example.movieandroidapp.presentation.theme.MovieAndroidAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
