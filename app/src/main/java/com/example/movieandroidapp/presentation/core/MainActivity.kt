@@ -1,4 +1,4 @@
-package com.example.movieandroidapp
+package com.example.movieandroidapp.presentation.core
 
 import android.app.Activity
 import android.os.Bundle
@@ -13,20 +13,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.MovieAndroidAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MovieAndroidAppTheme {
                 
-                SetBarColor(color = MaterialTheme.colorScheme.inverseOnSurface)
+                SetBarColor(color = MaterialTheme.colorScheme.background)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val navController = rememberNavController()
 
+                    NavHost(navController = navController, startDestination = Screen.Main.rout) {
+                        composable(Screen.Main.rout) {
+                            MainScreen(navController)
+                        }
+                    }
                 }
             }
         }
