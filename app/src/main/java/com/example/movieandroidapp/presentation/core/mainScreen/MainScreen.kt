@@ -87,7 +87,7 @@ fun MainScreen(navHostController: NavHostController) {
                 Screen.TvSeries -> {
                     icon = Icons.Filled.LiveTv
                     iconDesc = "Tv Series Icon"
-                    title = "Movies"
+                    title = "Tv Series"
                 }
 
                 Screen.Profile -> {
