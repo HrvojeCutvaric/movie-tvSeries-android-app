@@ -1,5 +1,12 @@
 package com.example.movieandroidapp.presentation.core.mainScreen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -46,9 +53,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.presentation.movies.MoviesScreen
 import com.example.movieandroidapp.presentation.theme.IconColor
 import com.example.movieandroidapp.presentation.theme.Primary
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navHostController: NavHostController) {
     val mainViewModel = hiltViewModel<MainViewModel>()
@@ -62,22 +71,25 @@ fun MainScreen(navHostController: NavHostController) {
             var iconDesc = "Home Icon"
             var title = "Title"
 
-            when(mainState.currentScreen) {
+            when (mainState.currentScreen) {
                 Screen.Home -> {
                     icon = Icons.Filled.Home
                     iconDesc = "Home Icon"
                     title = "Home"
                 }
+
                 Screen.Movies -> {
                     icon = Icons.Filled.Movie
                     iconDesc = "Movie Icon"
                     title = "Movies"
                 }
+
                 Screen.TvSeries -> {
                     icon = Icons.Filled.LiveTv
                     iconDesc = "Tv Series Icon"
                     title = "Movies"
                 }
+
                 Screen.Profile -> {
                     icon = Icons.Filled.AccountCircle
                     iconDesc = "Profile Icon"
@@ -101,29 +113,47 @@ fun MainScreen(navHostController: NavHostController) {
                 .fillMaxSize()
                 .padding(it)
         ) {
-            NavHost(navController = navController, startDestination = Screen.Home.rout) {
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Home.rout
+            ) {
                 composable(
                     route = Screen.Home.rout
                 ) {
-                    Text(text = Screen.Home.rout)
+                    Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = Screen.Home.rout)
+                    }
                 }
 
                 composable(
                     route = Screen.Movies.rout
                 ) {
-                    Text(text = Screen.Movies.rout)
+                    MoviesScreen()
                 }
 
                 composable(
                     route = Screen.TvSeries.rout
                 ) {
-                    Text(text = Screen.TvSeries.rout)
+                    Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = Screen.TvSeries.rout)
+                    }
                 }
 
                 composable(
                     route = Screen.Profile.rout
                 ) {
-                    Text(text = Screen.Profile.rout)
+                    Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = Screen.Profile.rout)
+                    }
                 }
             }
         }
@@ -166,7 +196,10 @@ fun TopBar(icon: ImageVector, iconDesc: String, title: String) {
 }
 
 @Composable
-fun BottomNavigationBar(navHostController: NavHostController,navigateOnOtherScreen: (screen: Screen) -> Unit) {
+fun BottomNavigationBar(
+    navHostController: NavHostController,
+    navigateOnOtherScreen: (screen: Screen) -> Unit
+) {
 
     val items = listOf(
         BottomItem(
