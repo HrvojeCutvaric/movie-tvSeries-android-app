@@ -1,8 +1,8 @@
-package com.example.movieandroidapp.presentation.movieList
+package com.example.movieandroidapp.presentation.movies
 
 import com.example.movieandroidapp.domain.models.Movie
 
-data class MovieListState (
+data class MoviesState (
     val isLoading: Boolean = false,
 
     val popularMovieListPage: Int = 1,
