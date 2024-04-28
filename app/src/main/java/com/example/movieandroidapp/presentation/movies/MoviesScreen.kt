@@ -51,9 +51,10 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.movieandroidapp.R
 import com.example.movieandroidapp.data.remote.TMDBApi
-import com.example.movieandroidapp.domain.models.Movie
+import com.example.movieandroidapp.domain.models.movie.Movie
 import com.example.movieandroidapp.domain.utils.Category
 import com.example.movieandroidapp.domain.utils.MoviesFragments
+import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.CardBackground
 import com.example.movieandroidapp.presentation.theme.IconColor
@@ -64,7 +65,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MoviesScreen() {
+fun MoviesScreen(mainNavController: NavHostController) {
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val moviesState = moviesViewModel.moviesState.collectAsState().value
     val navController = rememberNavController()
@@ -75,18 +76,30 @@ fun MoviesScreen() {
         CategoryNavigationBar(navController)
         NavHost(navController = navController, startDestination = MoviesFragments.Popular.rout) {
             composable(Category.POPULAR) {
-                DisplayMovieList(movieList = moviesState.popularMovieList, isLoading = moviesState.isLoading) {
+                DisplayMovieList(
+                    movieList = moviesState.popularMovieList,
+                    isLoading = moviesState.isLoading,
+                    mainNavController
+                ) {
                     moviesViewModel.onEvent(MoviesUiEvent.Paginate(Category.POPULAR))
                 }
 
             }
             composable(Category.UPCOMING) {
-                DisplayMovieList(movieList = moviesState.upcomingMovieList, isLoading = moviesState.isLoading) {
+                DisplayMovieList(
+                    movieList = moviesState.upcomingMovieList,
+                    isLoading = moviesState.isLoading,
+                    mainNavController
+                ) {
                     moviesViewModel.onEvent(MoviesUiEvent.Paginate(Category.UPCOMING))
                 }
             }
             composable(Category.PLAYING) {
-                DisplayMovieList(movieList = moviesState.nowPlayingMovieList, isLoading = moviesState.isLoading) {
+                DisplayMovieList(
+                    movieList = moviesState.nowPlayingMovieList,
+                    isLoading = moviesState.isLoading,
+                    mainNavController
+                ) {
                     moviesViewModel.onEvent(MoviesUiEvent.Paginate(Category.PLAYING))
                 }
             }
@@ -98,7 +111,12 @@ fun MoviesScreen() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DisplayMovieList(movieList: List<Movie>, isLoading: Boolean, onEvent: () -> Unit) {
+fun DisplayMovieList(
+    movieList: List<Movie>,
+    isLoading: Boolean,
+    mainNavController: NavHostController,
+    onEvent: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -115,7 +133,7 @@ fun DisplayMovieList(movieList: List<Movie>, isLoading: Boolean, onEvent: () -> 
                 contentPadding = PaddingValues(horizontal = 20.dp),
             ) {
                 items(movieList.size) { index ->
-                    MovieRow(movie = movieList[index])
+                    MovieRow(movie = movieList[index], mainNavController)
 
                     if (index >= movieList.size - 1 && !isLoading) {
                         onEvent()
@@ -172,7 +190,7 @@ data class CategoryNavItem(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MovieRow(movie: Movie) {
+fun MovieRow(movie: Movie, mainNavController: NavHostController) {
 
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -188,6 +206,9 @@ fun MovieRow(movie: Movie) {
             .padding(bottom = 10.dp)
             .clip(RoundedCornerShape(22.dp))
             .background(CardBackground)
+            .clickable {
+                mainNavController.navigate(Screen.MovieDetails.rout + "/${movie.id}")
+            }
     ) {
         if (imageState is AsyncImagePainter.State.Error) {
             Box(

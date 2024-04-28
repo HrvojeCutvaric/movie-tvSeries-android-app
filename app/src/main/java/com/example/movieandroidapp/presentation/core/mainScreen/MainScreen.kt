@@ -97,6 +97,7 @@ fun MainScreen(navHostController: NavHostController) {
                 }
 
                 Screen.Main -> Unit
+                Screen.MovieDetails -> Unit
             }
 
             TopBar(icon = icon, iconDesc = iconDesc, title = title)
@@ -131,7 +132,7 @@ fun MainScreen(navHostController: NavHostController) {
                 composable(
                     route = Screen.Movies.rout
                 ) {
-                    MoviesScreen()
+                    MoviesScreen(navHostController)
                 }
 
                 composable(

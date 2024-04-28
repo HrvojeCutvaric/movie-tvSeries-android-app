@@ -1,4 +1,4 @@
-package com.example.movieandroidapp.domain.models
+package com.example.movieandroidapp.domain.models.movie
 
 data class Movie (
     val adult: Boolean,

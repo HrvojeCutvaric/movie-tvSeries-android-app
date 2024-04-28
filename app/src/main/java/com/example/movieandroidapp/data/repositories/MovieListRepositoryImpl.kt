@@ -2,9 +2,11 @@ package com.example.movieandroidapp.data.repositories
 
 import com.example.movieandroidapp.data.local.movie.MovieDatabase
 import com.example.movieandroidapp.data.mappers.toMovie
+import com.example.movieandroidapp.data.mappers.toMovieDetails
 import com.example.movieandroidapp.data.mappers.toMovieEntity
 import com.example.movieandroidapp.data.remote.TMDBApi
-import com.example.movieandroidapp.domain.models.Movie
+import com.example.movieandroidapp.domain.models.movie.Movie
+import com.example.movieandroidapp.domain.models.movie.details.MovieDetails
 import com.example.movieandroidapp.domain.repositories.MovieListRepository
 import com.example.movieandroidapp.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -82,6 +84,31 @@ class MovieListRepositoryImpl @Inject constructor(
             }
 
             emit(Resource.Error(message = "Error no such movie"))
+            emit(Resource.Loading(false))
+        }
+    }
+
+    override suspend fun getMovieDetails(id: Int): Flow<Resource<MovieDetails>> {
+        return flow {
+            emit(Resource.Loading(true))
+
+            val movieDetailsFromApi = try {
+                tmdbApi.getMovieDetails(id)
+            }catch (e: IOException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
+            } catch (e: HttpException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Resource.Error(message = "Error loading movies"))
+                return@flow
+            }
+
+            emit(Resource.Success(movieDetailsFromApi.toMovieDetails()))
             emit(Resource.Loading(false))
         }
     }

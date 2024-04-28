@@ -1,6 +1,6 @@
 package com.example.movieandroidapp.presentation.movies
 
-import com.example.movieandroidapp.domain.models.Movie
+import com.example.movieandroidapp.domain.models.movie.Movie
 
 data class MoviesState (
     val isLoading: Boolean = false,
