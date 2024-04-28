@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ImageNotSupported
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -69,39 +70,9 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
             ).build()
     ).state
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    if (movieDetailsState.movieDetails == null) {
 
-        Box(modifier = Modifier.fillMaxWidth()) {
-
-            if (backDropImageState is AsyncImagePainter.State.Error) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.size(70.dp),
-                        imageVector = Icons.Rounded.ImageNotSupported,
-                        contentDescription = movieDetailsState.movieDetails?.title
-                    )
-                }
-            }
-
-            if (backDropImageState is AsyncImagePainter.State.Success) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    painter = backDropImageState.painter,
-                    contentDescription = movieDetailsState.movieDetails?.title,
-                    contentScale = ContentScale.Crop
-                )
-            }
-
+        Column(modifier = Modifier.fillMaxSize()) {
             FloatingActionButton(
                 modifier = Modifier.padding(12.dp),
                 onClick = { navHostController.popBackStack() },
@@ -109,28 +80,30 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                 containerColor = Color.Transparent,
                 shape = CircleShape
             ) {
-                Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "Back Arrow")
+                Icon(
+                    imageVector = Icons.Filled.ArrowBackIosNew,
+                    contentDescription = "Back Arrow"
+                )
             }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+
         }
 
+    } else {
 
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
 
-            Box(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(150.dp)
-            ) {
-                if (posterImageState is AsyncImagePainter.State.Error) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+
+                if (backDropImageState is AsyncImagePainter.State.Error) {
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp))
+                            .fillMaxWidth()
+                            .height(200.dp)
                             .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
@@ -142,111 +115,176 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                     }
                 }
 
-                if (posterImageState is AsyncImagePainter.State.Success) {
+                if (backDropImageState is AsyncImagePainter.State.Success) {
                     Image(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp)),
-                        painter = posterImageState.painter,
+                            .fillMaxWidth()
+                            .height(200.dp),
+                        painter = backDropImageState.painter,
                         contentDescription = movieDetailsState.movieDetails?.title,
                         contentScale = ContentScale.Crop
                     )
                 }
+
+                FloatingActionButton(
+                    modifier = Modifier.padding(12.dp),
+                    onClick = { navHostController.popBackStack() },
+                    contentColor = Primary,
+                    containerColor = Color.Transparent,
+                    shape = CircleShape
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBackIosNew,
+                        contentDescription = "Back Arrow"
+                    )
+                }
             }
 
-            Column(
+
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp)
+                    .padding(16.dp)
             ) {
+
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(150.dp)
+                ) {
+                    if (posterImageState is AsyncImagePainter.State.Error) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.primaryContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(70.dp),
+                                imageVector = Icons.Rounded.ImageNotSupported,
+                                contentDescription = movieDetailsState.movieDetails?.title
+                            )
+                        }
+                    }
+
+                    if (posterImageState is AsyncImagePainter.State.Success) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)),
+                            painter = posterImageState.painter,
+                            contentDescription = movieDetailsState.movieDetails?.title,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 5.dp),
+                        text = movieDetailsState.movieDetails?.title ?: "",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 24.sp
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(top = 5.dp),
+                        text = displayGenres(movieDetailsState.movieDetails?.genres),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = TextSecondary
+                    )
+
+                    val date = LocalDate.parse(
+                        movieDetailsState.movieDetails?.release_date ?: "1970-01-01"
+                    )
+                    val displayDateFormat = DateTimeFormatter.ofPattern("dd MMMM yyyy").format(date)
+
+                    Text(
+                        modifier = Modifier.padding(top = 5.dp),
+                        text = displayDateFormat,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = TextSecondary
+                    )
+                }
+
+            }
+
+            Row(
+                Modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RatingBar(
+                    modifier = Modifier.padding(
+                        start = 0.dp,
+                        top = 8.dp,
+                        bottom = 8.dp,
+                        end = 8.dp
+                    ),
+                    starsModifier = Modifier.size(18.dp),
+                    rating = (movieDetailsState.movieDetails?.vote_average ?: 1.0) / 2
+                )
                 Text(
-                    modifier = Modifier.padding(top = 5.dp),
-                    text = movieDetailsState.movieDetails?.title ?: "",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 24.sp
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 8.dp),
+                    text = (movieDetailsState.movieDetails?.vote_average ?: 1.000).toString()
+                        .take(3),
+                    color = Color.Yellow,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
                 )
 
-                Text(
-                    modifier = Modifier.padding(top = 5.dp),
-                    text = displayGenres(movieDetailsState.movieDetails?.genres),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = TextSecondary
-                )
 
-                val date = LocalDate.parse(movieDetailsState.movieDetails?.release_date ?: "1970-01-01")
-                val displayDateFormat = DateTimeFormatter.ofPattern("dd MMMM yyyy").format(date)
 
                 Text(
-                    modifier = Modifier.padding(top = 5.dp),
-                    text = displayDateFormat,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = TextSecondary
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                    text = displayReviewsCount(movieDetailsState.movieDetails?.vote_count ?: 0),
+                    color = TextSecondary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
 
-        }
-
-        Row(
-            Modifier
-                .padding(start = 16.dp, end = 16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RatingBar(
-                modifier = Modifier.padding(start = 0.dp, top = 8.dp, bottom = 8.dp, end = 8.dp),
-                starsModifier = Modifier.size(18.dp),
-                rating = (movieDetailsState.movieDetails?.vote_average ?: 1.0) / 2
-            )
             Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 8.dp),
-                text = (movieDetailsState.movieDetails?.vote_average ?: 1.000).toString().take(3),
-                color = Color.Yellow,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
+                text = "Overview",
+                fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                color = TextPrimary
             )
-
-
-
             Text(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                text = displayReviewsCount(movieDetailsState.movieDetails?.vote_count ?: 0),
-                color = TextSecondary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                text = movieDetailsState.movieDetails?.overview ?: "",
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                color = TextSecondary
             )
+
         }
-
-        Text(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
-            text = "Overview",
-            fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
-            color = TextPrimary
-        )
-        Text(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-            text = movieDetailsState.movieDetails?.overview ?: "",
-            fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
-            color = TextSecondary
-        )
-
     }
+
+
 }
 
 fun displayGenres(genres: List<Genre>?): String {
     var result = ""
     val size = genres?.size ?: 0
 
-    genres?.forEachIndexed {index, genre ->
-        result += genre.name + if(index < size-1) ", " else ""
+    genres?.forEachIndexed { index, genre ->
+        result += genre.name + if (index < size - 1) ", " else ""
     }
 
-    return if(result != "") result else "No Genres"
+    return if (result != "") result else "No Genres"
 }
 
 fun displayReviewsCount(voteCount: Int): String {
@@ -266,6 +304,6 @@ fun displayReviewsCount(voteCount: Int): String {
         }
     }
 
-    result += " review${if(voteCount > 1) "s" else ""})"
+    result += " review${if (voteCount > 1) "s" else ""})"
     return result
 }
