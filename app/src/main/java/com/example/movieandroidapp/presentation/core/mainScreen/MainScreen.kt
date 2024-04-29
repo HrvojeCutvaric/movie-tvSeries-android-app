@@ -54,6 +54,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.movies.MoviesScreen
+import com.example.movieandroidapp.presentation.profile.ProfileScreen
 import com.example.movieandroidapp.presentation.theme.IconColor
 import com.example.movieandroidapp.presentation.theme.Primary
 
@@ -149,12 +150,7 @@ fun MainScreen(navHostController: NavHostController) {
                 composable(
                     route = Screen.Profile.rout
                 ) {
-                    Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = Screen.Profile.rout)
-                    }
+                    ProfileScreen()
                 }
             }
         }
