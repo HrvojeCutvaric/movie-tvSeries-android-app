@@ -2,11 +2,6 @@ package com.example.movieandroidapp.presentation.core.mainScreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -99,6 +94,7 @@ fun MainScreen(navHostController: NavHostController) {
 
                 Screen.Main -> Unit
                 Screen.MovieDetails -> Unit
+                Screen.SignUp -> Unit
             }
 
             TopBar(icon = icon, iconDesc = iconDesc, title = title)
@@ -150,7 +146,7 @@ fun MainScreen(navHostController: NavHostController) {
                 composable(
                     route = Screen.Profile.rout
                 ) {
-                    ProfileScreen()
+                    ProfileScreen(navHostController)
                 }
             }
         }
