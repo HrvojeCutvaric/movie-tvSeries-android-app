@@ -1,6 +1,7 @@
 package com.example.movieandroidapp.presentation.core.mainScreen
 
 import androidx.lifecycle.ViewModel
+import com.example.movieandroidapp.domain.utils.MainFragmentScreen
 import com.example.movieandroidapp.domain.utils.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,10 +12,10 @@ class MainViewModel : ViewModel() {
     private var _mainState = MutableStateFlow(MainState())
     var mainState = _mainState.asStateFlow()
 
-    fun navigateToOtherScreen(screen: Screen) {
+    fun navigateToOtherScreen(mainFragmentScreen: MainFragmentScreen) {
         _mainState.update {
             it.copy(
-                currentScreen = screen
+                currentScreen = mainFragmentScreen
             )
         }
     }

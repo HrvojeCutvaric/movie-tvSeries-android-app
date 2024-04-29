@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.domain.utils.MainFragmentScreen
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.movies.MoviesScreen
 import com.example.movieandroidapp.presentation.profile.ProfileScreen
@@ -68,33 +69,29 @@ fun MainScreen(navHostController: NavHostController) {
             var title = "Title"
 
             when (mainState.currentScreen) {
-                Screen.Home -> {
+                MainFragmentScreen.Home -> {
                     icon = Icons.Filled.Home
                     iconDesc = "Home Icon"
                     title = "Home"
                 }
 
-                Screen.Movies -> {
+                MainFragmentScreen.Movies -> {
                     icon = Icons.Filled.Movie
                     iconDesc = "Movie Icon"
                     title = "Movies"
                 }
 
-                Screen.TvSeries -> {
+                MainFragmentScreen.TvSeries -> {
                     icon = Icons.Filled.LiveTv
                     iconDesc = "Tv Series Icon"
                     title = "Tv Series"
                 }
 
-                Screen.Profile -> {
+                MainFragmentScreen.Profile -> {
                     icon = Icons.Filled.AccountCircle
                     iconDesc = "Profile Icon"
                     title = "Profile"
                 }
-
-                Screen.Main -> Unit
-                Screen.MovieDetails -> Unit
-                Screen.SignUp -> Unit
             }
 
             TopBar(icon = icon, iconDesc = iconDesc, title = title)
@@ -113,38 +110,38 @@ fun MainScreen(navHostController: NavHostController) {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screen.Home.rout
+                startDestination = MainFragmentScreen.Home.rout
             ) {
                 composable(
-                    route = Screen.Home.rout
+                    route = MainFragmentScreen.Home.rout
                 ) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = Screen.Home.rout)
+                        Text(text = MainFragmentScreen.Home.rout)
                     }
                 }
 
                 composable(
-                    route = Screen.Movies.rout
+                    route = MainFragmentScreen.Movies.rout
                 ) {
                     MoviesScreen(navHostController)
                 }
 
                 composable(
-                    route = Screen.TvSeries.rout
+                    route = MainFragmentScreen.TvSeries.rout
                 ) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = Screen.TvSeries.rout)
+                        Text(text = MainFragmentScreen.TvSeries.rout)
                     }
                 }
 
                 composable(
-                    route = Screen.Profile.rout
+                    route = MainFragmentScreen.Profile.rout
                 ) {
                     ProfileScreen(navHostController)
                 }
@@ -191,7 +188,7 @@ fun TopBar(icon: ImageVector, iconDesc: String, title: String) {
 @Composable
 fun BottomNavigationBar(
     navHostController: NavHostController,
-    navigateOnOtherScreen: (screen: Screen) -> Unit
+    navigateOnOtherScreen: (mainFragmentScreen: MainFragmentScreen) -> Unit
 ) {
 
     val items = listOf(
@@ -244,27 +241,27 @@ fun BottomNavigationBar(
                         selected.intValue = index
                         when (selected.intValue) {
                             0 -> {
-                                navigateOnOtherScreen(Screen.Home)
+                                navigateOnOtherScreen(MainFragmentScreen.Home)
                                 navHostController.popBackStack()
-                                navHostController.navigate(Screen.Home.rout)
+                                navHostController.navigate(MainFragmentScreen.Home.rout)
                             }
 
                             1 -> {
-                                navigateOnOtherScreen(Screen.Movies)
+                                navigateOnOtherScreen(MainFragmentScreen.Movies)
                                 navHostController.popBackStack()
-                                navHostController.navigate(Screen.Movies.rout)
+                                navHostController.navigate(MainFragmentScreen.Movies.rout)
                             }
 
                             2 -> {
-                                navigateOnOtherScreen(Screen.TvSeries)
+                                navigateOnOtherScreen(MainFragmentScreen.TvSeries)
                                 navHostController.popBackStack()
-                                navHostController.navigate(Screen.TvSeries.rout)
+                                navHostController.navigate(MainFragmentScreen.TvSeries.rout)
                             }
 
                             3 -> {
-                                navigateOnOtherScreen(Screen.Profile)
+                                navigateOnOtherScreen(MainFragmentScreen.Profile)
                                 navHostController.popBackStack()
-                                navHostController.navigate(Screen.Profile.rout)
+                                navHostController.navigate(MainFragmentScreen.Profile.rout)
                             }
                         }
                     },
