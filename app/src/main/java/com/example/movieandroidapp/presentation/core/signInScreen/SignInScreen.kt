@@ -64,14 +64,14 @@ fun SignInScreen() {
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
         Text(
-            text = "Sign Up",
+            text = "Sign In",
             color = TextPrimary,
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
         Text(
             modifier = Modifier.padding(bottom = 16.dp),
-            text = "Welcome! Create new account with your credentials.",
+            text = "Welcome back! Enter your credentials to sing in.",
             color = TextSecondary,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold
