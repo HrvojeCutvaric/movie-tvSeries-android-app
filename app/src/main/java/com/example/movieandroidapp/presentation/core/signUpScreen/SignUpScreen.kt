@@ -20,13 +20,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -52,10 +52,11 @@ fun SignUpScreen() {
 
     val signUpViewModel = hiltViewModel<SignUpViewModel>()
     val focusManager = LocalFocusManager.current
-    val showPassword = remember {
+    val context = LocalContext.current
+    var showPassword by remember {
         mutableStateOf(false)
     }
-    val showConfirmPassword = remember {
+    var showConfirmPassword by remember {
         mutableStateOf(false)
     }
 
@@ -86,9 +87,11 @@ fun SignUpScreen() {
             fontWeight = FontWeight.SemiBold
         )
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = signUpViewModel.email,
-            onValueChange = { email -> signUpViewModel.updateEmail(email) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(),
+            value = signUpViewModel.formState.email,
+            onValueChange = { email -> signUpViewModel.onEvent(SignUpEvent.EmailChanged(email)) },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Email, contentDescription = "Email")
             },
@@ -110,7 +113,7 @@ fun SignUpScreen() {
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 autoCorrect = true,
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
@@ -118,11 +121,17 @@ fun SignUpScreen() {
                     focusManager.clearFocus()
                 }
             ),
-            isError = false,
-
+            singleLine = true,
+            supportingText = {
+                val isError = signUpViewModel.formState.emailError != null
+                Text(
+                    text = if (isError) signUpViewModel.formState.emailError!!.asString(context) else "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            },
+            isError = signUpViewModel.formState.emailError != null
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Password",
@@ -132,20 +141,20 @@ fun SignUpScreen() {
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = signUpViewModel.password,
-            onValueChange = { password -> signUpViewModel.updatePassword(password) },
+            value = signUpViewModel.formState.password,
+            onValueChange = { password -> signUpViewModel.onEvent(SignUpEvent.PasswordChange(password)) },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
             },
             trailingIcon = {
 
-                val icon = if(showPassword.value) {
+                val icon = if(showPassword) {
                     Icons.Filled.VisibilityOff
                 }else {
                     Icons.Filled.Visibility
                 }
 
-                IconButton(onClick = { showPassword.value = !showPassword.value }) {
+                IconButton(onClick = { showPassword = !showPassword }) {
                     Icon(imageVector = icon, contentDescription = "Visible Icon")
                 }
 
@@ -166,21 +175,28 @@ fun SignUpScreen() {
                     fontWeight = FontWeight.SemiBold
                 )
             },
-            visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = true,
+                autoCorrect = false,
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
-                onDone = {
+                onNext = {
                     focusManager.clearFocus()
                 }
             ),
-            isError = false
+            singleLine = true,
+            supportingText = {
+                val isError = signUpViewModel.formState.passwordError != null
+                Text(
+                    text = if (isError) signUpViewModel.formState.passwordError!!.asString(context) else "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            },
+            isError = signUpViewModel.formState.passwordError != null
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Confirm Password",
@@ -190,20 +206,20 @@ fun SignUpScreen() {
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = signUpViewModel.confirmPassword,
-            onValueChange = { password -> signUpViewModel.updateConfirmPassword(password) },
+            value = signUpViewModel.formState.confirmPassword,
+            onValueChange = { password -> signUpViewModel.onEvent(SignUpEvent.ConfirmPasswordChange(password)) },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
             },
             trailingIcon = {
 
-                val icon = if(showConfirmPassword.value) {
+                val icon = if(showConfirmPassword) {
                     Icons.Filled.VisibilityOff
                 }else {
                     Icons.Filled.Visibility
                 }
 
-                IconButton(onClick = { showConfirmPassword.value = !showConfirmPassword.value }) {
+                IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
                     Icon(imageVector = icon, contentDescription = "Visible Icon")
                 }
 
@@ -224,18 +240,28 @@ fun SignUpScreen() {
                     fontWeight = FontWeight.SemiBold
                 )
             },
-            visualTransformation = if (showConfirmPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = true,
+                autoCorrect = false,
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
+
                 }
             ),
-            isError = false
+            singleLine = true,
+            isError = signUpViewModel.formState.confirmPasswordError != null,
+            supportingText = {
+                val isError = signUpViewModel.formState.confirmPasswordError != null
+                Text(
+                    text = if (isError) signUpViewModel.formState.confirmPasswordError!!.asString(context) else "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -247,7 +273,9 @@ fun SignUpScreen() {
             colors = ButtonDefaults.buttonColors(
                 containerColor = Primary,
             ),
-            onClick = { }
+            onClick = {
+                signUpViewModel.onEvent(SignUpEvent.Submit)
+            }
         ) {
             Text(text = "Sing Up", color = Background, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
