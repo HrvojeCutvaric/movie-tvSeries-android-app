@@ -23,6 +23,7 @@ import androidx.navigation.navArgument
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.core.mainScreen.MainScreen
 import com.example.movieandroidapp.presentation.core.movieDetails.MovieDetailsScreen
+import com.example.movieandroidapp.presentation.core.signInScreen.SignInScreen
 import com.example.movieandroidapp.presentation.core.signUpScreen.SignUpScreen
 import com.example.movieandroidapp.presentation.theme.MovieAndroidAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,9 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.SignUp.rout) {
                             SignUpScreen()
+                        }
+                        composable(Screen.SignIn.rout) {
+                            SignInScreen()
                         }
                     }
                 }

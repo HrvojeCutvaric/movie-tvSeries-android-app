@@ -89,9 +89,11 @@ fun ProfileScreen(mainNavController: NavHostController) {
         }
 
         Text(
-            modifier = Modifier.padding(top = 50.dp).clickable {
-
-            },
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .clickable {
+                    mainNavController.navigate(Screen.SignIn.rout)
+                },
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
                 withStyle(style = SpanStyle(Primary)) {
