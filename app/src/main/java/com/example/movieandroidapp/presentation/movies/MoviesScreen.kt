@@ -260,7 +260,7 @@ fun MovieRow(movie: Movie, mainNavController: NavHostController) {
                 Icon(
                     modifier = Modifier.size(25.dp),
                     imageVector = Icons.Filled.Star,
-                    contentDescription = "Start",
+                    contentDescription = stringResource(R.string.start),
                     tint = Color.Yellow
                 )
                 Text(

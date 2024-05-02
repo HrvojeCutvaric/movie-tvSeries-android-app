@@ -26,10 +26,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -39,12 +46,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.R
 import com.example.movieandroidapp.data.remote.firebase.AuthResource
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
@@ -71,21 +77,21 @@ fun SignInScreen(mainNavController: NavHostController) {
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
         Text(
-            text = "Sign In",
+            text = stringResource(R.string.sign_in),
             color = TextPrimary,
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
         Text(
             modifier = Modifier.padding(bottom = 16.dp),
-            text = "Welcome back! Enter your credentials to sing in.",
+            text = stringResource(R.string.welcome_back_enter_your_credentials_to_sing_in),
             color = TextSecondary,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold
         )
 
         Text(
-            text = "Email",
+            text = stringResource(R.string.email),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
@@ -97,7 +103,7 @@ fun SignInScreen(mainNavController: NavHostController) {
             value = signInViewModel.formState.email,
             onValueChange = { email -> signInViewModel.onEvent(SignInEvent.EmailChanged(email)) },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Email, contentDescription = "Email")
+                Icon(imageVector = Icons.Filled.Email, contentDescription = stringResource(R.string.email))
             },
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Primary,
@@ -109,7 +115,7 @@ fun SignInScreen(mainNavController: NavHostController) {
             ),
             placeholder = {
                 Text(
-                    text = "Enter your email",
+                    text = stringResource(R.string.enter_your_email),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
@@ -138,7 +144,7 @@ fun SignInScreen(mainNavController: NavHostController) {
         )
 
         Text(
-            text = "Password",
+            text = stringResource(R.string.password),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
@@ -154,7 +160,7 @@ fun SignInScreen(mainNavController: NavHostController) {
                 )
             },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
+                Icon(imageVector = Icons.Filled.Lock, contentDescription = stringResource(R.string.password))
             },
             trailingIcon = {
 
@@ -163,9 +169,14 @@ fun SignInScreen(mainNavController: NavHostController) {
                 } else {
                     Icons.Filled.Visibility
                 }
+                val description = if (showPassword) {
+                    stringResource(R.string.visible_off_icon)
+                } else {
+                    stringResource(R.string.visible_icon)
+                }
 
                 IconButton(onClick = { showPassword = !showPassword }) {
-                    Icon(imageVector = icon, contentDescription = "Visible Icon")
+                    Icon(imageVector = icon, contentDescription = description)
                 }
 
             },
@@ -179,7 +190,7 @@ fun SignInScreen(mainNavController: NavHostController) {
             ),
             placeholder = {
                 Text(
-                    text = "Enter your password",
+                    text = stringResource(R.string.enter_your_password),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
@@ -224,7 +235,7 @@ fun SignInScreen(mainNavController: NavHostController) {
             }
         ) {
             Text(
-                text = "Sing In",
+                text = stringResource(id = R.string.sign_in),
                 color = Background,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
@@ -240,9 +251,9 @@ fun SignInScreen(mainNavController: NavHostController) {
                     mainNavController.navigate(Screen.SignUp.rout)
                 },
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Don't have an account? ") }
+                withStyle(style = SpanStyle(TextSecondary)) { append(stringResource(R.string.don_t_have_an_account)) }
                 withStyle(style = SpanStyle(Primary)) {
-                    append("Sign Up")
+                    append(stringResource(R.string.sign_up))
                 }
             },
             textAlign = TextAlign.Center
@@ -257,9 +268,9 @@ fun SignInScreen(mainNavController: NavHostController) {
                     mainNavController.navigate(Screen.Main.rout)
                 },
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Login as ") }
+                withStyle(style = SpanStyle(TextSecondary)) { append(stringResource(R.string.login_as)) }
                 withStyle(style = SpanStyle(Primary)) {
-                    append("Guest")
+                    append(stringResource(R.string.guest))
                 }
             },
             textAlign = TextAlign.Center

@@ -1,5 +1,6 @@
 package com.example.movieandroidapp.presentation.core.movieDetails
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -32,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +43,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.movieandroidapp.R
 import com.example.movieandroidapp.data.remote.TMDBApi
 import com.example.movieandroidapp.domain.models.movie.Genre
 import com.example.movieandroidapp.domain.utils.RatingBar
@@ -82,7 +85,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Back Arrow"
+                    contentDescription = stringResource(R.string.back_arrow_icon)
                 )
             }
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -110,7 +113,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                         Icon(
                             modifier = Modifier.size(70.dp),
                             imageVector = Icons.Rounded.ImageNotSupported,
-                            contentDescription = movieDetailsState.movieDetails?.title
+                            contentDescription = movieDetailsState.movieDetails.title
                         )
                     }
                 }
@@ -121,7 +124,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                             .fillMaxWidth()
                             .height(200.dp),
                         painter = backDropImageState.painter,
-                        contentDescription = movieDetailsState.movieDetails?.title,
+                        contentDescription = movieDetailsState.movieDetails.title,
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -135,7 +138,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBackIosNew,
-                        contentDescription = "Back Arrow"
+                        contentDescription = stringResource(id = R.string.back_arrow_icon)
                     )
                 }
             }
@@ -164,7 +167,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                             Icon(
                                 modifier = Modifier.size(70.dp),
                                 imageVector = Icons.Rounded.ImageNotSupported,
-                                contentDescription = movieDetailsState.movieDetails?.title
+                                contentDescription = movieDetailsState.movieDetails.title
                             )
                         }
                     }
@@ -175,7 +178,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(12.dp)),
                             painter = posterImageState.painter,
-                            contentDescription = movieDetailsState.movieDetails?.title,
+                            contentDescription = movieDetailsState.movieDetails.title,
                             contentScale = ContentScale.Crop
                         )
                     }
@@ -188,21 +191,21 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 5.dp),
-                        text = movieDetailsState.movieDetails?.title ?: "",
+                        text = movieDetailsState.movieDetails.title,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 24.sp
                     )
 
                     Text(
                         modifier = Modifier.padding(top = 5.dp),
-                        text = displayGenres(movieDetailsState.movieDetails?.genres),
+                        text = displayGenres(movieDetailsState.movieDetails.genres, LocalContext.current),
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
                         color = TextSecondary
                     )
 
                     val date = LocalDate.parse(
-                        movieDetailsState.movieDetails?.release_date ?: "1970-01-01"
+                        movieDetailsState.movieDetails.release_date
                     )
                     val displayDateFormat = DateTimeFormatter.ofPattern("dd MMMM yyyy").format(date)
 
@@ -231,13 +234,13 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
                         end = 8.dp
                     ),
                     starsModifier = Modifier.size(18.dp),
-                    rating = (movieDetailsState.movieDetails?.vote_average ?: 1.0) / 2
+                    rating = (movieDetailsState.movieDetails.vote_average) / 2
                 )
                 Text(
                     modifier = Modifier
                         .weight(1f)
                         .padding(vertical = 8.dp),
-                    text = (movieDetailsState.movieDetails?.vote_average ?: 1.000).toString()
+                    text = (movieDetailsState.movieDetails.vote_average).toString()
                         .take(3),
                     color = Color.Yellow,
                     fontSize = 16.sp,
@@ -248,7 +251,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
 
                 Text(
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                    text = displayReviewsCount(movieDetailsState.movieDetails?.vote_count ?: 0),
+                    text = displayReviewsCount(movieDetailsState.movieDetails.vote_count),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
@@ -257,14 +260,14 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
 
             Text(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
-                text = "Overview",
+                text = stringResource(R.string.overview),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 color = TextPrimary
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                text = movieDetailsState.movieDetails?.overview ?: "",
+                text = movieDetailsState.movieDetails.overview,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 color = TextSecondary
@@ -276,7 +279,7 @@ fun MovieDetailsScreen(navHostController: NavHostController) {
 
 }
 
-fun displayGenres(genres: List<Genre>?): String {
+fun displayGenres(genres: List<Genre>?, context: Context): String {
     var result = ""
     val size = genres?.size ?: 0
 
@@ -284,7 +287,7 @@ fun displayGenres(genres: List<Genre>?): String {
         result += genre.name + if (index < size - 1) ", " else ""
     }
 
-    return if (result != "") result else "No Genres"
+    return if (result != "") result else context.getString(R.string.no_genres)
 }
 
 fun displayReviewsCount(voteCount: Int): String {

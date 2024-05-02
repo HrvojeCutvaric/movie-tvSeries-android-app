@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,6 +48,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.R
 import com.example.movieandroidapp.domain.utils.MainFragmentScreen
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.movies.MoviesScreen
@@ -65,32 +67,32 @@ fun MainScreen(navHostController: NavHostController) {
         topBar = {
 
             var icon: ImageVector = Icons.Filled.Home
-            var iconDesc = "Home Icon"
+            var iconDesc = stringResource(R.string.home_icon)
             var title = "Title"
 
             when (mainState.currentScreen) {
                 MainFragmentScreen.Home -> {
                     icon = Icons.Filled.Home
-                    iconDesc = "Home Icon"
-                    title = "Home"
+                    iconDesc = stringResource(R.string.home_icon)
+                    title = stringResource(R.string.home)
                 }
 
                 MainFragmentScreen.Movies -> {
                     icon = Icons.Filled.Movie
-                    iconDesc = "Movie Icon"
-                    title = "Movies"
+                    iconDesc = stringResource(R.string.movie_icon)
+                    title = stringResource(R.string.movies)
                 }
 
                 MainFragmentScreen.TvSeries -> {
                     icon = Icons.Filled.LiveTv
-                    iconDesc = "Tv Series Icon"
-                    title = "Tv Series"
+                    iconDesc = stringResource(R.string.tv_series_icon)
+                    title = stringResource(R.string.tv_series)
                 }
 
                 MainFragmentScreen.Profile -> {
                     icon = Icons.Filled.AccountCircle
-                    iconDesc = "Profile Icon"
-                    title = "Profile"
+                    iconDesc = stringResource(R.string.profile_icon)
+                    title = stringResource(R.string.profile)
                 }
             }
 
@@ -178,7 +180,7 @@ fun TopBar(icon: ImageVector, iconDesc: String, title: String) {
                 .size(35.dp)
                 .clickable { },
             imageVector = Icons.AutoMirrored.Filled.ManageSearch,
-            contentDescription = "Search Icon",
+            contentDescription = stringResource(R.string.search_icon),
             tint = IconColor
         )
 
@@ -193,22 +195,22 @@ fun BottomNavigationBar(
 
     val items = listOf(
         BottomItem(
-            description = "Home",
+            description = stringResource(id = R.string.home),
             icon = Icons.Outlined.Home,
             selectedIcon = Icons.Filled.Home
         ),
         BottomItem(
-            description = "Movies",
+            description = stringResource(id = R.string.movies),
             icon = Icons.Outlined.Movie,
             selectedIcon = Icons.Filled.Movie
         ),
         BottomItem(
-            description = "Tv Series",
+            description = stringResource(id = R.string.tv_series),
             icon = Icons.Outlined.LiveTv,
             selectedIcon = Icons.Filled.LiveTv
         ),
         BottomItem(
-            description = "Profile",
+            description = stringResource(id = R.string.profile),
             icon = Icons.Outlined.AccountCircle,
             selectedIcon = Icons.Filled.AccountCircle
         )

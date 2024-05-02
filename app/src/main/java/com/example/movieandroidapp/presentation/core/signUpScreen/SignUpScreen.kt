@@ -30,6 +30,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -39,18 +40,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.movieandroidapp.data.remote.firebase.AuthResource
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
 import com.example.movieandroidapp.presentation.theme.TextSecondary
+import com.example.movieandroidapp.R
 
 @Composable
 fun SignUpScreen(mainNavController: NavHostController) {
@@ -74,21 +74,21 @@ fun SignUpScreen(mainNavController: NavHostController) {
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
         Text(
-            text = "Sign Up",
+            text = stringResource(id = R.string.sign_up),
             color = TextPrimary,
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
         Text(
             modifier = Modifier.padding(bottom = 16.dp),
-            text = "Welcome! Create new account with your credentials.",
+            text = stringResource(R.string.welcome_create_new_account_with_your_credentials),
             color = TextSecondary,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold
         )
 
         Text(
-            text = "Email",
+            text = stringResource(id = R.string.email),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
@@ -100,7 +100,10 @@ fun SignUpScreen(mainNavController: NavHostController) {
             value = signUpViewModel.formState.email,
             onValueChange = { email -> signUpViewModel.onEvent(SignUpEvent.EmailChanged(email)) },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Email, contentDescription = "Email")
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    contentDescription = stringResource(id = R.string.email)
+                )
             },
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Primary,
@@ -112,7 +115,7 @@ fun SignUpScreen(mainNavController: NavHostController) {
             ),
             placeholder = {
                 Text(
-                    text = "Enter your email",
+                    text = stringResource(id = R.string.enter_your_email),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
@@ -141,7 +144,7 @@ fun SignUpScreen(mainNavController: NavHostController) {
         )
 
         Text(
-            text = "Password",
+            text = stringResource(id = R.string.password),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
@@ -157,7 +160,10 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 )
             },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = stringResource(id = R.string.password)
+                )
             },
             trailingIcon = {
 
@@ -166,9 +172,14 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 } else {
                     Icons.Filled.Visibility
                 }
+                val description = if (showPassword) {
+                    stringResource(R.string.visible_off_icon)
+                } else {
+                    stringResource(R.string.visible_icon)
+                }
 
                 IconButton(onClick = { showPassword = !showPassword }) {
-                    Icon(imageVector = icon, contentDescription = "Visible Icon")
+                    Icon(imageVector = icon, contentDescription = description)
                 }
 
             },
@@ -182,7 +193,7 @@ fun SignUpScreen(mainNavController: NavHostController) {
             ),
             placeholder = {
                 Text(
-                    text = "Enter your password",
+                    text = stringResource(R.string.enter_your_password),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
@@ -212,7 +223,7 @@ fun SignUpScreen(mainNavController: NavHostController) {
         )
 
         Text(
-            text = "Confirm Password",
+            text = stringResource(R.string.confirm_password),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
@@ -228,7 +239,10 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 )
             },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = stringResource(R.string.password)
+                )
             },
             trailingIcon = {
 
@@ -237,9 +251,14 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 } else {
                     Icons.Filled.Visibility
                 }
+                val description = if (showPassword) {
+                    stringResource(R.string.visible_off_icon)
+                } else {
+                    stringResource(R.string.visible_icon)
+                }
 
                 IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
-                    Icon(imageVector = icon, contentDescription = "Visible Icon")
+                    Icon(imageVector = icon, contentDescription = description)
                 }
 
             },
@@ -253,7 +272,7 @@ fun SignUpScreen(mainNavController: NavHostController) {
             ),
             placeholder = {
                 Text(
-                    text = "Confirm your password",
+                    text = stringResource(R.string.confirm_your_password),
                     color = TextSecondary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold
@@ -313,9 +332,9 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 .fillMaxWidth()
                 .clickable { mainNavController.navigate(Screen.SignIn.rout) },
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
+                withStyle(style = SpanStyle(TextSecondary)) { append(stringResource(R.string.already_have_an_account)) }
                 withStyle(style = SpanStyle(Primary)) {
-                    append("Sign In")
+                    append(stringResource(id = R.string.sign_in))
                 }
             },
             textAlign = TextAlign.Center
@@ -330,9 +349,9 @@ fun SignUpScreen(mainNavController: NavHostController) {
                     mainNavController.navigate(Screen.Main.rout)
                 },
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Login as ") }
+                withStyle(style = SpanStyle(TextSecondary)) { append(stringResource(id = R.string.login_as)) }
                 withStyle(style = SpanStyle(Primary)) {
-                    append("Guest")
+                    append(stringResource(id = R.string.guest))
                 }
             },
             textAlign = TextAlign.Center

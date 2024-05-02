@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.movieandroidapp.R
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.core.signInScreen.SignInViewModel
 import com.example.movieandroidapp.presentation.core.signUpScreen.SignUpViewModel
@@ -50,7 +52,7 @@ fun ProfileScreen(mainNavController: NavHostController) {
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Create an account",
+                text = stringResource(R.string.create_an_account),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Start,
@@ -58,7 +60,7 @@ fun ProfileScreen(mainNavController: NavHostController) {
             )
             Text(
                 modifier = Modifier.padding(top = 4.dp),
-                text = "Hey there, create an account and begin your journey with our App. Find out what movies are now playing and more.",
+                text = stringResource(R.string.hey_there_create_an_account_and_begin_your_journey_with_our_app_find_out_what_movies_are_now_playing_and_more),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
                 color = TextSecondary
@@ -81,14 +83,14 @@ fun ProfileScreen(mainNavController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Sign Up",
+                        text = stringResource(id = R.string.sign_up),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium,
                         color = Background
                     )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                        contentDescription = "ArrowForward",
+                        contentDescription = stringResource(R.string.arrow_forward_icon),
                         tint = Background
                     )
 
@@ -102,9 +104,9 @@ fun ProfileScreen(mainNavController: NavHostController) {
                         mainNavController.navigate(Screen.SignIn.rout)
                     },
                 text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
+                    withStyle(style = SpanStyle(TextSecondary)) { append(stringResource(id = R.string.already_have_an_account)) }
                     withStyle(style = SpanStyle(Primary)) {
-                        append("Sign In")
+                        append(stringResource(id = R.string.sign_in))
                     }
                 },
                 color = TextSecondary,
@@ -130,7 +132,7 @@ fun ProfileScreen(mainNavController: NavHostController) {
                     signInViewModel.logout()
                     mainNavController.navigate(Screen.Main.rout)
                 },
-                text = "Logout",
+                text = stringResource(R.string.logout),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = Primary
