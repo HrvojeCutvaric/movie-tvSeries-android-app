@@ -63,7 +63,6 @@ fun SignInScreen(mainNavController: NavHostController) {
     }
 
     val singInFLow = signInViewModel.signInFlow.collectAsState()
-    val navController = rememberNavController()
 
     Column(
         modifier = Modifier
@@ -235,7 +234,11 @@ fun SignInScreen(mainNavController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    mainNavController.navigate(Screen.SignUp.rout)
+                },
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(TextSecondary)) { append("Don't have an account? ") }
                 withStyle(style = SpanStyle(Primary)) {
@@ -250,7 +253,9 @@ fun SignInScreen(mainNavController: NavHostController) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { },
+                .clickable {
+                    mainNavController.navigate(Screen.Main.rout)
+                },
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(TextSecondary)) { append("Login as ") }
                 withStyle(style = SpanStyle(Primary)) {
@@ -273,7 +278,7 @@ fun SignInScreen(mainNavController: NavHostController) {
 
                 is AuthResource.Success -> {
                     LaunchedEffect(Unit) {
-                        mainNavController.navigate(Screen.Main.rout){
+                        mainNavController.navigate(Screen.Main.rout) {
                             popUpTo(Screen.SignIn.rout) { inclusive = true }
                         }
                     }

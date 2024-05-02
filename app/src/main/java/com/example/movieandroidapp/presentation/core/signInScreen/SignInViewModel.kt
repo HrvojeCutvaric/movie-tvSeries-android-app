@@ -47,8 +47,6 @@ class SignInViewModel @Inject constructor(
             }
 
             SignInEvent.Submit -> {
-                Log.i("CURRENT_USER", Firebase.auth.currentUser.toString())
-
                 if (validateEmail() && validatePassword()) {
                     signIn(formState.email, formState.password)
                 } else {

@@ -6,7 +6,7 @@ import com.example.movieandroidapp.presentation.utils.UiText
 
 class ValidatePasswordUseCase {
     fun execute(input: String): ValidationResult {
-        if(input.length < 8) {
+        if(input.length < 6) {
             return ValidationResult(
                 successful = false,
                 errorMessage = UiText.StringResource(resId = R.string.thePasswordNotLongEnough)

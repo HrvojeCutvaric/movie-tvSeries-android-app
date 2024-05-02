@@ -149,15 +149,21 @@ fun SignUpScreen(mainNavController: NavHostController) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = signUpViewModel.formState.password,
-            onValueChange = { password -> signUpViewModel.onEvent(SignUpEvent.PasswordChange(password)) },
+            onValueChange = { password ->
+                signUpViewModel.onEvent(
+                    SignUpEvent.PasswordChange(
+                        password
+                    )
+                )
+            },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
             },
             trailingIcon = {
 
-                val icon = if(showPassword) {
+                val icon = if (showPassword) {
                     Icons.Filled.VisibilityOff
-                }else {
+                } else {
                     Icons.Filled.Visibility
                 }
 
@@ -214,15 +220,21 @@ fun SignUpScreen(mainNavController: NavHostController) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = signUpViewModel.formState.confirmPassword,
-            onValueChange = { password -> signUpViewModel.onEvent(SignUpEvent.ConfirmPasswordChange(password)) },
+            onValueChange = { password ->
+                signUpViewModel.onEvent(
+                    SignUpEvent.ConfirmPasswordChange(
+                        password
+                    )
+                )
+            },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
             },
             trailingIcon = {
 
-                val icon = if(showConfirmPassword) {
+                val icon = if (showConfirmPassword) {
                     Icons.Filled.VisibilityOff
-                }else {
+                } else {
                     Icons.Filled.Visibility
                 }
 
@@ -264,7 +276,9 @@ fun SignUpScreen(mainNavController: NavHostController) {
             supportingText = {
                 val isError = signUpViewModel.formState.confirmPasswordError != null
                 Text(
-                    text = if (isError) signUpViewModel.formState.confirmPasswordError!!.asString(context) else "",
+                    text = if (isError) signUpViewModel.formState.confirmPasswordError!!.asString(
+                        context
+                    ) else "",
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -284,13 +298,20 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 signUpViewModel.onEvent(SignUpEvent.Submit)
             }
         ) {
-            Text(text = "Sing Up", color = Background, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Sing Up",
+                color = Background,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { mainNavController.navigate(Screen.SignIn.rout) },
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
                 withStyle(style = SpanStyle(Primary)) {
@@ -305,7 +326,9 @@ fun SignUpScreen(mainNavController: NavHostController) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { },
+                .clickable {
+                    mainNavController.navigate(Screen.Main.rout)
+                },
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(TextSecondary)) { append("Login as ") }
                 withStyle(style = SpanStyle(Primary)) {

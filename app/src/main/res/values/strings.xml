@@ -4,7 +4,7 @@
     <string name="upcoming">Upcoming</string>
     <string name="playing">Playing</string>
     <string name="theEmailCanNotBeBlank">The email can not be blank</string>
-    <string name="thePasswordNotLongEnough">The password should have at least 8 characters</string>
+    <string name="thePasswordNotLongEnough">The password should have at least 6 characters</string>
     <string name="theConfirmPasswordCanNotBeBlank">The confirm password can not be blank</string>
     <string name="invalidEmail">Invalid email</string>
     <string name="invalidPassword">Password should be strong</string>
