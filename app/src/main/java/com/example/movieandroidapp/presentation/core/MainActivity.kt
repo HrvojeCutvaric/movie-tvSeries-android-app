@@ -55,10 +55,10 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screen.SignUp.rout) {
-                            SignUpScreen()
+                            SignUpScreen(navController)
                         }
                         composable(Screen.SignIn.rout) {
-                            SignInScreen()
+                            SignInScreen(navController)
                         }
                     }
                 }

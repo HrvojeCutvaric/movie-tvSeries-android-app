@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -100,4 +101,9 @@ dependencies {
 
     // EdgeToEdge.enableEdgeToEdge
     implementation ("androidx.activity:activity-ktx:1.9.0")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 }

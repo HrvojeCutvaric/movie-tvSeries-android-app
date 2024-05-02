@@ -25,8 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.presentation.core.signInScreen.SignInViewModel
+import com.example.movieandroidapp.presentation.core.signUpScreen.SignUpViewModel
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
@@ -34,77 +37,106 @@ import com.example.movieandroidapp.presentation.theme.TextSecondary
 
 @Composable
 fun ProfileScreen(mainNavController: NavHostController) {
+    val signInViewModel = hiltViewModel<SignInViewModel>()
+    val signUpViewModel = hiltViewModel<SignUpViewModel>()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Create an account",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Start,
-            color = TextPrimary
-        )
-        Text(
-            modifier = Modifier.padding(top = 4.dp),
-            text = "Hey there, create an account and begin your journey with our App. Find out what movies are now playing and more.",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-            color = TextSecondary
-        )
 
-        Button(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Primary
-            ),
-            onClick = {
-                mainNavController.navigate(Screen.SignUp.rout)
-            }) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Sign Up",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Background
-                )
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                    contentDescription = "ArrowForward",
-                    tint = Background
-                )
-
-            }
-        }
-
-        Text(
+    if (signInViewModel.currentUser == null && signUpViewModel.currentUser == null) {
+        Column(
             modifier = Modifier
-                .padding(top = 50.dp)
-                .clickable {
-                    mainNavController.navigate(Screen.SignIn.rout)
-                },
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
-                withStyle(style = SpanStyle(Primary)) {
-                    append("Sign In")
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Create an account",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Start,
+                color = TextPrimary
+            )
+            Text(
+                modifier = Modifier.padding(top = 4.dp),
+                text = "Hey there, create an account and begin your journey with our App. Find out what movies are now playing and more.",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                color = TextSecondary
+            )
+
+            Button(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+                shape = CircleShape,
+                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Primary
+                ),
+                onClick = {
+                    mainNavController.navigate(Screen.SignUp.rout)
+                }) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Sign Up",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Background
+                    )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        contentDescription = "ArrowForward",
+                        tint = Background
+                    )
+
                 }
-            },
-            color = TextSecondary,
-            fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center
-        )
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .clickable {
+                        mainNavController.navigate(Screen.SignIn.rout)
+                    },
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(TextSecondary)) { append("Already have an account? ") }
+                    withStyle(style = SpanStyle(Primary)) {
+                        append("Sign In")
+                    }
+                },
+                color = TextSecondary,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = signInViewModel.currentUser?.email ?: "",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                modifier = Modifier.clickable {
+                    signInViewModel.logout()
+                    mainNavController.navigate(Screen.Main.rout)
+                },
+                text = "Logout",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                color = Primary
+            )
+        }
     }
+
 
 }

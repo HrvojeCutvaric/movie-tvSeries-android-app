@@ -1,5 +1,6 @@
 package com.example.movieandroidapp.presentation.core.signInScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,14 +43,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.data.remote.firebase.AuthResource
+import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
 import com.example.movieandroidapp.presentation.theme.TextSecondary
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(mainNavController: NavHostController) {
 
     val signInViewModel = hiltViewModel<SignInViewModel>()
     val focusManager = LocalFocusManager.current
@@ -56,6 +61,9 @@ fun SignInScreen() {
     var showPassword by remember {
         mutableStateOf(false)
     }
+
+    val singInFLow = signInViewModel.signInFlow.collectAsState()
+    val navController = rememberNavController()
 
     Column(
         modifier = Modifier
@@ -139,15 +147,21 @@ fun SignInScreen() {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = signInViewModel.formState.password,
-            onValueChange = { password -> signInViewModel.onEvent(SignInEvent.PasswordChange(password)) },
+            onValueChange = { password ->
+                signInViewModel.onEvent(
+                    SignInEvent.PasswordChange(
+                        password
+                    )
+                )
+            },
             leadingIcon = {
                 Icon(imageVector = Icons.Filled.Lock, contentDescription = "Password")
             },
             trailingIcon = {
 
-                val icon = if(showPassword) {
+                val icon = if (showPassword) {
                     Icons.Filled.VisibilityOff
-                }else {
+                } else {
                     Icons.Filled.Visibility
                 }
 
@@ -210,7 +224,12 @@ fun SignInScreen() {
                 signInViewModel.onEvent(SignInEvent.Submit)
             }
         ) {
-            Text(text = "Sing Up", color = Background, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Sing In",
+                color = Background,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -218,7 +237,7 @@ fun SignInScreen() {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(TextSecondary)) { append("Don't have a account? ") }
+                withStyle(style = SpanStyle(TextSecondary)) { append("Don't have an account? ") }
                 withStyle(style = SpanStyle(Primary)) {
                     append("Sign Up")
                 }
@@ -240,6 +259,30 @@ fun SignInScreen() {
             },
             textAlign = TextAlign.Center
         )
+
+        singInFLow.value.let {
+            when (it) {
+                is AuthResource.Failure -> {
+                    val context = LocalContext.current
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                }
+
+                AuthResource.Loading -> {
+                    CircularProgressIndicator()
+                }
+
+                is AuthResource.Success -> {
+                    LaunchedEffect(Unit) {
+                        mainNavController.navigate(Screen.Main.rout){
+                            popUpTo(Screen.SignIn.rout) { inclusive = true }
+                        }
+                    }
+
+                }
+
+                null -> Unit
+            }
+        }
     }
 
 }

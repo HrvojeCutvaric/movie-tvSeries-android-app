@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.room.Room
 import com.example.movieandroidapp.data.local.movie.MovieDatabase
 import com.example.movieandroidapp.data.remote.TMDBApi
+import com.example.movieandroidapp.data.repositories.AuthRepositoryImpl
+import com.example.movieandroidapp.domain.repositories.AuthRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +49,11 @@ object AppModule {
             "moviedb.db"
         ).build()
     }
+
+    @Provides
+    fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    fun providesAuthRepository(impl: AuthRepositoryImpl): AuthRepository = impl
 
 }

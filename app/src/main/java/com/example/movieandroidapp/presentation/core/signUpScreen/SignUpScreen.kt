@@ -1,5 +1,6 @@
 package com.example.movieandroidapp.presentation.core.signUpScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,14 +43,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.movieandroidapp.data.remote.firebase.AuthResource
+import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
 import com.example.movieandroidapp.presentation.theme.TextSecondary
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(mainNavController: NavHostController) {
 
     val signUpViewModel = hiltViewModel<SignUpViewModel>()
     val focusManager = LocalFocusManager.current
@@ -59,6 +64,8 @@ fun SignUpScreen() {
     var showConfirmPassword by remember {
         mutableStateOf(false)
     }
+
+    val singUpFlow = signUpViewModel.signUpFlow.collectAsState()
 
     Column(
         modifier = Modifier
@@ -307,6 +314,30 @@ fun SignUpScreen() {
             },
             textAlign = TextAlign.Center
         )
+
+        singUpFlow.value.let {
+            when (it) {
+                is AuthResource.Failure -> {
+                    val context = LocalContext.current
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                }
+
+                AuthResource.Loading -> {
+                    CircularProgressIndicator()
+                }
+
+                is AuthResource.Success -> {
+                    LaunchedEffect(Unit) {
+                        mainNavController.navigate(Screen.Main.rout) {
+                            popUpTo(Screen.SignUp.rout) { inclusive = true }
+                        }
+                    }
+
+                }
+
+                null -> Unit
+            }
+        }
     }
 
 }
