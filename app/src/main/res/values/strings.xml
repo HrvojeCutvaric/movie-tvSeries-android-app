@@ -42,4 +42,10 @@
     <string name="profile_icon">Profile Icon</string>
     <string name="profile">Profile</string>
     <string name="search_icon">Search Icon</string>
+    <string name="edit">Edit</string>
+    <string name="no_display_name">No Display Name</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="saved">Saved</string>
+    <string name="next_icon">Next Icon</string>
 </resources>
