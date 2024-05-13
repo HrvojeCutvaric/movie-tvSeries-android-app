@@ -53,7 +53,7 @@ import com.example.movieandroidapp.R
 import com.example.movieandroidapp.data.remote.TMDBApi
 import com.example.movieandroidapp.domain.models.movie.Movie
 import com.example.movieandroidapp.domain.utils.Category
-import com.example.movieandroidapp.domain.utils.MoviesFragments
+import com.example.movieandroidapp.domain.utils.MoviesFragment
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.CardBackground
@@ -74,7 +74,7 @@ fun MoviesScreen(mainNavController: NavHostController) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         CategoryNavigationBar(navController)
-        NavHost(navController = navController, startDestination = MoviesFragments.Popular.rout) {
+        NavHost(navController = navController, startDestination = MoviesFragment.Popular.rout) {
             composable(Category.POPULAR) {
                 DisplayMovieList(
                     movieList = moviesState.popularMovieList,
@@ -148,9 +148,9 @@ fun DisplayMovieList(
 @Composable
 fun CategoryNavigationBar(navController: NavHostController) {
     val items = listOf(
-        CategoryNavItem(stringResource(R.string.popular), MoviesFragments.Popular.rout),
-        CategoryNavItem(stringResource(R.string.upcoming), MoviesFragments.Upcoming.rout),
-        CategoryNavItem(stringResource(R.string.playing), MoviesFragments.Playing.rout)
+        CategoryNavItem(stringResource(R.string.popular), MoviesFragment.Popular.rout),
+        CategoryNavItem(stringResource(R.string.upcoming), MoviesFragment.Upcoming.rout),
+        CategoryNavItem(stringResource(R.string.playing), MoviesFragment.Playing.rout)
     )
 
     val selected = rememberSaveable {

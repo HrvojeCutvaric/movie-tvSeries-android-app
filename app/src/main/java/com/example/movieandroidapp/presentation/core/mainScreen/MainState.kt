@@ -1,8 +1,7 @@
 package com.example.movieandroidapp.presentation.core.mainScreen
 
-import com.example.movieandroidapp.domain.utils.MainFragmentScreen
-import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.domain.utils.MainFragment
 
 data class MainState(
-    val currentScreen: MainFragmentScreen = MainFragmentScreen.Home
+    val currentFragment: MainFragment = MainFragment.Home
 )

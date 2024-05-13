@@ -49,8 +49,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieandroidapp.R
-import com.example.movieandroidapp.domain.utils.MainFragmentScreen
-import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.domain.utils.MainFragment
 import com.example.movieandroidapp.presentation.movies.MoviesScreen
 import com.example.movieandroidapp.presentation.profile.ProfileScreen
 import com.example.movieandroidapp.presentation.theme.IconColor
@@ -70,26 +69,26 @@ fun MainScreen(navHostController: NavHostController) {
             var iconDesc = stringResource(R.string.home_icon)
             var title = "Title"
 
-            when (mainState.currentScreen) {
-                MainFragmentScreen.Home -> {
+            when (mainState.currentFragment) {
+                MainFragment.Home -> {
                     icon = Icons.Filled.Home
                     iconDesc = stringResource(R.string.home_icon)
                     title = stringResource(R.string.home)
                 }
 
-                MainFragmentScreen.Movies -> {
+                MainFragment.Movies -> {
                     icon = Icons.Filled.Movie
                     iconDesc = stringResource(R.string.movie_icon)
                     title = stringResource(R.string.movies)
                 }
 
-                MainFragmentScreen.TvSeries -> {
+                MainFragment.TvSeries -> {
                     icon = Icons.Filled.LiveTv
                     iconDesc = stringResource(R.string.tv_series_icon)
                     title = stringResource(R.string.tv_series)
                 }
 
-                MainFragmentScreen.Profile -> {
+                MainFragment.Profile -> {
                     icon = Icons.Filled.AccountCircle
                     iconDesc = stringResource(R.string.profile_icon)
                     title = stringResource(R.string.profile)
@@ -101,7 +100,7 @@ fun MainScreen(navHostController: NavHostController) {
         bottomBar = {
             BottomNavigationBar(
                 navHostController = navController,
-                navigateOnOtherScreen = mainViewModel::navigateToOtherScreen
+                navigateOnOtherScreen = mainViewModel::navigateToOtherFragment
             )
         }
     ) {
@@ -112,38 +111,38 @@ fun MainScreen(navHostController: NavHostController) {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = MainFragmentScreen.Home.rout
+                startDestination = MainFragment.Home.rout
             ) {
                 composable(
-                    route = MainFragmentScreen.Home.rout
+                    route = MainFragment.Home.rout
                 ) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = MainFragmentScreen.Home.rout)
+                        Text(text = MainFragment.Home.rout)
                     }
                 }
 
                 composable(
-                    route = MainFragmentScreen.Movies.rout
+                    route = MainFragment.Movies.rout
                 ) {
                     MoviesScreen(navHostController)
                 }
 
                 composable(
-                    route = MainFragmentScreen.TvSeries.rout
+                    route = MainFragment.TvSeries.rout
                 ) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = MainFragmentScreen.TvSeries.rout)
+                        Text(text = MainFragment.TvSeries.rout)
                     }
                 }
 
                 composable(
-                    route = MainFragmentScreen.Profile.rout
+                    route = MainFragment.Profile.rout
                 ) {
                     ProfileScreen(navHostController)
                 }
@@ -190,7 +189,7 @@ fun TopBar(icon: ImageVector, iconDesc: String, title: String) {
 @Composable
 fun BottomNavigationBar(
     navHostController: NavHostController,
-    navigateOnOtherScreen: (mainFragmentScreen: MainFragmentScreen) -> Unit
+    navigateOnOtherScreen: (mainFragment: MainFragment) -> Unit
 ) {
 
     val items = listOf(
@@ -243,27 +242,27 @@ fun BottomNavigationBar(
                         selected.intValue = index
                         when (selected.intValue) {
                             0 -> {
-                                navigateOnOtherScreen(MainFragmentScreen.Home)
+                                navigateOnOtherScreen(MainFragment.Home)
                                 navHostController.popBackStack()
-                                navHostController.navigate(MainFragmentScreen.Home.rout)
+                                navHostController.navigate(MainFragment.Home.rout)
                             }
 
                             1 -> {
-                                navigateOnOtherScreen(MainFragmentScreen.Movies)
+                                navigateOnOtherScreen(MainFragment.Movies)
                                 navHostController.popBackStack()
-                                navHostController.navigate(MainFragmentScreen.Movies.rout)
+                                navHostController.navigate(MainFragment.Movies.rout)
                             }
 
                             2 -> {
-                                navigateOnOtherScreen(MainFragmentScreen.TvSeries)
+                                navigateOnOtherScreen(MainFragment.TvSeries)
                                 navHostController.popBackStack()
-                                navHostController.navigate(MainFragmentScreen.TvSeries.rout)
+                                navHostController.navigate(MainFragment.TvSeries.rout)
                             }
 
                             3 -> {
-                                navigateOnOtherScreen(MainFragmentScreen.Profile)
+                                navigateOnOtherScreen(MainFragment.Profile)
                                 navHostController.popBackStack()
-                                navHostController.navigate(MainFragmentScreen.Profile.rout)
+                                navHostController.navigate(MainFragment.Profile.rout)
                             }
                         }
                     },
