@@ -1,4 +1,4 @@
-package com.example.movieandroidapp.presentation.core.signUpScreen
+package com.example.movieandroidapp.presentation.core.auth.signUpScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -51,6 +51,7 @@ import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
 import com.example.movieandroidapp.presentation.theme.TextSecondary
 import com.example.movieandroidapp.R
+import com.example.movieandroidapp.presentation.core.auth.AuthViewModel
 
 @Composable
 fun SignUpScreen(mainNavController: NavHostController) {
@@ -65,7 +66,8 @@ fun SignUpScreen(mainNavController: NavHostController) {
         mutableStateOf(false)
     }
 
-    val singUpFlow = signUpViewModel.signUpFlow.collectAsState()
+    val authViewModel = hiltViewModel<AuthViewModel>()
+    val authState = authViewModel.authState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -314,7 +316,13 @@ fun SignUpScreen(mainNavController: NavHostController) {
                 containerColor = Primary,
             ),
             onClick = {
-                signUpViewModel.onEvent(SignUpEvent.Submit)
+                val isUserInputValid = signUpViewModel.onEvent(SignUpEvent.Submit)
+                if (isUserInputValid) {
+                    authViewModel.signUp(
+                        signUpViewModel.formState.email,
+                        signUpViewModel.formState.password
+                    )
+                }
             }
         ) {
             Text(
@@ -357,11 +365,11 @@ fun SignUpScreen(mainNavController: NavHostController) {
             textAlign = TextAlign.Center
         )
 
-        singUpFlow.value.let {
+        authState.value.let {
             when (it) {
                 is AuthResource.Failure -> {
-                    val context = LocalContext.current
-                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(LocalContext.current, it.exception.message, Toast.LENGTH_LONG)
+                        .show()
                 }
 
                 AuthResource.Loading -> {

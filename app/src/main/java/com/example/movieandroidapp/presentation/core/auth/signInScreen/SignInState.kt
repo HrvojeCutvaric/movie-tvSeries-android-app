@@ -1,4 +1,4 @@
-package com.example.movieandroidapp.presentation.core.signInScreen
+package com.example.movieandroidapp.presentation.core.auth.signInScreen
 
 import com.example.movieandroidapp.presentation.utils.UiText
 

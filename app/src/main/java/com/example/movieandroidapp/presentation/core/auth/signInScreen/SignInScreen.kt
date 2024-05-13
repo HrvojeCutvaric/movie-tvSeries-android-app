@@ -1,4 +1,4 @@
-package com.example.movieandroidapp.presentation.core.signInScreen
+package com.example.movieandroidapp.presentation.core.auth.signInScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -53,6 +53,7 @@ import androidx.navigation.NavHostController
 import com.example.movieandroidapp.R
 import com.example.movieandroidapp.data.remote.firebase.AuthResource
 import com.example.movieandroidapp.domain.utils.Screen
+import com.example.movieandroidapp.presentation.core.auth.AuthViewModel
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.Primary
 import com.example.movieandroidapp.presentation.theme.TextPrimary
@@ -68,7 +69,8 @@ fun SignInScreen(mainNavController: NavHostController) {
         mutableStateOf(false)
     }
 
-    val singInFLow = signInViewModel.signInFlow.collectAsState()
+    val authViewModel = hiltViewModel<AuthViewModel>()
+    val authState = authViewModel.authState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -103,7 +105,10 @@ fun SignInScreen(mainNavController: NavHostController) {
             value = signInViewModel.formState.email,
             onValueChange = { email -> signInViewModel.onEvent(SignInEvent.EmailChanged(email)) },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Email, contentDescription = stringResource(R.string.email))
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    contentDescription = stringResource(R.string.email)
+                )
             },
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Primary,
@@ -160,7 +165,10 @@ fun SignInScreen(mainNavController: NavHostController) {
                 )
             },
             leadingIcon = {
-                Icon(imageVector = Icons.Filled.Lock, contentDescription = stringResource(R.string.password))
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = stringResource(R.string.password)
+                )
             },
             trailingIcon = {
 
@@ -231,7 +239,13 @@ fun SignInScreen(mainNavController: NavHostController) {
                 containerColor = Primary,
             ),
             onClick = {
-                signInViewModel.onEvent(SignInEvent.Submit)
+                val isUserInputValid = signInViewModel.onEvent(SignInEvent.Submit)
+                if (isUserInputValid) {
+                    authViewModel.signIn(
+                        signInViewModel.formState.email,
+                        signInViewModel.formState.password
+                    )
+                }
             }
         ) {
             Text(
@@ -276,11 +290,11 @@ fun SignInScreen(mainNavController: NavHostController) {
             textAlign = TextAlign.Center
         )
 
-        singInFLow.value.let {
+        authState.value.let {
             when (it) {
                 is AuthResource.Failure -> {
-                    val context = LocalContext.current
-                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(LocalContext.current, it.exception.message, Toast.LENGTH_LONG)
+                        .show()
                 }
 
                 AuthResource.Loading -> {

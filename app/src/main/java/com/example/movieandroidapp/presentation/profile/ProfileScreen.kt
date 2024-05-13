@@ -1,6 +1,5 @@
 package com.example.movieandroidapp.presentation.profile
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,8 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.movieandroidapp.R
 import com.example.movieandroidapp.domain.utils.Screen
-import com.example.movieandroidapp.presentation.core.signInScreen.SignInViewModel
-import com.example.movieandroidapp.presentation.core.signUpScreen.SignUpViewModel
+import com.example.movieandroidapp.presentation.core.auth.AuthViewModel
 import com.example.movieandroidapp.presentation.theme.Background
 import com.example.movieandroidapp.presentation.theme.CardBackground
 import com.example.movieandroidapp.presentation.theme.IconColor
@@ -60,11 +57,10 @@ import com.example.movieandroidapp.presentation.theme.TextSecondary
 
 @Composable
 fun ProfileScreen(mainNavController: NavHostController) {
-    val signInViewModel = hiltViewModel<SignInViewModel>()
-    val signUpViewModel = hiltViewModel<SignUpViewModel>()
+    val authViewModel = hiltViewModel<AuthViewModel>()
 
 
-    if (signInViewModel.currentUser == null && signUpViewModel.currentUser == null) {
+    if (authViewModel.currentUser == null && authViewModel.currentUser == null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -164,7 +160,7 @@ fun ProfileScreen(mainNavController: NavHostController) {
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = if (signInViewModel.currentUser?.displayName == "") stringResource(R.string.no_display_name) else signInViewModel.currentUser?.displayName
+                text = if (authViewModel.currentUser?.displayName == "") stringResource(R.string.no_display_name) else authViewModel.currentUser?.displayName
                     ?: stringResource(R.string.no_display_name),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -172,7 +168,7 @@ fun ProfileScreen(mainNavController: NavHostController) {
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = signInViewModel.currentUser?.email ?: "",
+                text = authViewModel.currentUser?.email ?: "",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
@@ -207,7 +203,9 @@ fun ProfileScreen(mainNavController: NavHostController) {
                     name = stringResource(R.string.logout),
                     color = Color.Red,
                     showNextIcon = false,
-                    onClick = {}
+                    onClick = {
+                        authViewModel.logout()
+                    }
                 ),
             )
 

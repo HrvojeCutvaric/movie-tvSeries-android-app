@@ -23,8 +23,8 @@ import androidx.navigation.navArgument
 import com.example.movieandroidapp.domain.utils.Screen
 import com.example.movieandroidapp.presentation.core.mainScreen.MainScreen
 import com.example.movieandroidapp.presentation.core.movieDetails.MovieDetailsScreen
-import com.example.movieandroidapp.presentation.core.signInScreen.SignInScreen
-import com.example.movieandroidapp.presentation.core.signUpScreen.SignUpScreen
+import com.example.movieandroidapp.presentation.core.auth.signInScreen.SignInScreen
+import com.example.movieandroidapp.presentation.core.auth.signUpScreen.SignUpScreen
 import com.example.movieandroidapp.presentation.theme.MovieAndroidAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.example.movieandroidapp.presentation.core.signUpScreen
+package com.example.movieandroidapp.presentation.core.auth.signUpScreen
 
 sealed class SignUpEvent {
     data class EmailChanged(val email: String) : SignUpEvent()
