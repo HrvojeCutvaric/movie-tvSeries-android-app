@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.movieandroidapp.domain.validation.usecases.ValidateEmailUseCase
 import com.example.movieandroidapp.domain.validation.usecases.ValidatePasswordUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 
-@HiltViewModel
 class SignInViewModel : ViewModel() {
 
     private val validateEmailUseCase = ValidateEmailUseCase()
